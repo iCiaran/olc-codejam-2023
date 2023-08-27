@@ -22,3 +22,19 @@ void Maze::draw(olc::PixelGameEngine *pge, int cellSize) {
     }
 }
 
+void Maze::drawAroundPoint(olc::PixelGameEngine *pge, int cellSize, const olc::vi2d & point, int radius) {
+    int xCoord = cellSize * (point.x / cellSize) + cellSize / 2;
+    int yCoord = cellSize * (point.y / cellSize) + cellSize / 2;
+
+    for(int x = 0; x < size; x++) {
+        for(int y = 0; y < size; y++) {
+            if((x * cellSize - xCoord) * (x * cellSize - xCoord) + (y * cellSize - yCoord) * (y * cellSize - yCoord) < radius * radius) {
+                olc::Pixel colour = getCell(x, y) ? olc::WHITE : olc::DARK_GREY;
+                pge->FillRect(x * cellSize, y * cellSize, cellSize, cellSize, colour);
+            }
+        }
+    }
+}
+
+
+

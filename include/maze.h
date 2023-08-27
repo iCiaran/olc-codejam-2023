@@ -12,6 +12,7 @@ public:
 
     bool getCell(int x, int y);
     void draw(olc::PixelGameEngine *pge, int cellSize);
+    void drawAroundPoint(olc::PixelGameEngine *pge, int cellSize, const olc::vi2d &, int radius);
 
 private:
     std::mt19937 gen;

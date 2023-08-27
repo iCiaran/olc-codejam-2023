@@ -17,8 +17,11 @@ private:
     Maze maze{MAZE_SIZE, 1};
     
 public:
+    int radius;
+
     bool OnUserCreate() override {
         waveEngine.InitialiseAudio();
+        radius = 60;
 
         return true;
     }
@@ -26,7 +29,16 @@ public:
     bool OnUserUpdate(float fElapsedTime) override {
         Clear(olc::BLANK);
 
-        maze.draw(this, CELL_SIZE);
+        int mouseWheel = GetMouseWheel();
+        if(mouseWheel > 0) {
+            radius -= 10;
+        } else if (mouseWheel < 0) {
+            radius += 10;
+        }
+
+        maze.drawAroundPoint(this, CELL_SIZE, {GetMouseX(), GetMouseY()}, radius);
+
+        DrawString({10,10}, std::to_string(radius), olc::RED);
 
         return !GetKey(olc::ESCAPE).bPressed;
     }
