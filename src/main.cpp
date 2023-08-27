@@ -17,11 +17,10 @@ private:
     Maze maze{MAZE_SIZE, 1};
     
 public:
-    int radius;
+    int radius = 60;
 
     bool OnUserCreate() override {
         waveEngine.InitialiseAudio();
-        radius = 60;
 
         return true;
     }
