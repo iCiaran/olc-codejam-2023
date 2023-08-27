@@ -13,3 +13,12 @@ bool Maze::getCell(int x, int y) {
     return cells[y * size + x];
 }
 
+void Maze::draw(olc::PixelGameEngine *pge, int cellSize) {
+    for(int x = 0; x < size; x++) {
+        for(int y = 0; y < size; y++) {
+            olc::Pixel colour = getCell(x, y) ? olc::WHITE : olc::DARK_GREY;
+            pge->FillRect(x * cellSize, y * cellSize, cellSize, cellSize, colour);
+        }
+    }
+}
+

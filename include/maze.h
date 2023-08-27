@@ -3,6 +3,7 @@
 
 #include <random>
 #include <vector>
+#include "olcPixelGameEngine.h"
 
 class Maze {
 public:
@@ -10,6 +11,7 @@ public:
     const int size;
 
     bool getCell(int x, int y);
+    void draw(olc::PixelGameEngine *pge, int cellSize);
 
 private:
     std::mt19937 gen;

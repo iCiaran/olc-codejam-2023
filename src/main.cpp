@@ -26,12 +26,7 @@ public:
     bool OnUserUpdate(float fElapsedTime) override {
         Clear(olc::BLANK);
 
-        for(int x = 0; x < maze.size; x++) {
-            for(int y = 0; y < maze.size; y++) {
-                olc::Pixel colour = maze.getCell(x, y) ? olc::WHITE : olc::DARK_GREY;
-                FillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE, colour);
-            }
-        }
+        maze.draw(this, CELL_SIZE);
 
         return !GetKey(olc::ESCAPE).bPressed;
     }
