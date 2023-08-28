@@ -1,6 +1,6 @@
 #include "maze.h"
 
-Maze::Maze(int size, long seed) : size(size), gen(seed), distrib(0, size - 3), cells(size * size, false) {
+Maze::Maze(int size, long long seed) : size(size), gen(seed), distrib(0, size - 3), cells(size * size, false) {
     generate();
 }
 

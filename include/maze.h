@@ -7,7 +7,7 @@
 
 class Maze {
 public:
-    Maze(int size, long seed);
+    Maze(int size, long long seed);
     const int size;
 
     bool getCell(int x, int y);
