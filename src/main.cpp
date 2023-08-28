@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "olcPixelGameEngine.h"
 #include "olcSoundWaveEngine.h"
 
@@ -30,12 +32,13 @@ public:
 
         int mouseWheel = GetMouseWheel();
         if(mouseWheel > 0) {
-            radius -= 10;
+            radius -= 5;
+            radius = std::max(0, radius);
         } else if (mouseWheel < 0) {
-            radius += 10;
+            radius += 5;
         }
 
-        maze.drawAroundPoint(this, CELL_SIZE, {GetMouseX(), GetMouseY()}, radius);
+        maze.drawAroundPoint(this, CELL_SIZE, GetMousePos(), radius);
 
         DrawString({10,10}, std::to_string(radius), olc::RED);
 
