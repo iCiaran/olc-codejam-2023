@@ -5,7 +5,7 @@
 
 #include "maze.h"
 
-constexpr int MAZE_SIZE = 40;
+constexpr int MAZE_SIZE = 41;
 constexpr int CELL_SIZE = 10;
 
 class OneLoneCoder_Jam : public olc::PixelGameEngine {
@@ -16,7 +16,7 @@ public:
 
 private:
     olc::sound::WaveEngine waveEngine;
-    Maze maze{MAZE_SIZE, 1};
+    Maze maze{MAZE_SIZE, time(nullptr)};
     
 public:
     int radius = CELL_SIZE * 5;
