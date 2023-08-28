@@ -19,7 +19,7 @@ private:
     Maze maze{MAZE_SIZE, 1};
     
 public:
-    int radius = 60;
+    int radius = CELL_SIZE * 5;
 
     bool OnUserCreate() override {
         waveEngine.InitialiseAudio();
@@ -32,10 +32,10 @@ public:
 
         int mouseWheel = GetMouseWheel();
         if(mouseWheel > 0) {
-            radius -= 5;
+            radius -= CELL_SIZE / 2;
             radius = std::max(0, radius);
         } else if (mouseWheel < 0) {
-            radius += 5;
+            radius += CELL_SIZE / 2;
         }
 
         maze.drawAroundPoint(this, CELL_SIZE, GetMousePos(), radius);
