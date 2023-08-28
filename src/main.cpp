@@ -3,6 +3,10 @@
 #include "olcPixelGameEngine.h"
 #include "olcSoundWaveEngine.h"
 
+#if defined(OLC_PLATFORM_EMSCRIPTEN)
+#include <emscripten/fetch.h>
+#endif
+
 #include "maze.h"
 
 constexpr int MAZE_SIZE = 41;
@@ -21,9 +25,30 @@ private:
 public:
     int radius = CELL_SIZE * 5;
 
+#if defined(OLC_PLATFORM_EMSCRIPTEN)
+    static void downloadSucceeded(emscripten_fetch_t *fetch) {
+        printf("Finished downloading %llu bytes from URL %s.\n", fetch->numBytes, fetch->url);
+        // The data is now available at fetch->data[0] through fetch->data[fetch->numBytes-1];
+        emscripten_fetch_close(fetch); // Free data associated with the fetch.
+    }
+
+    static void downloadFailed(emscripten_fetch_t *fetch) {
+        printf("Downloading %s failed, HTTP failure status code: %d.\n", fetch->url, fetch->status);
+        emscripten_fetch_close(fetch); // Also free data on failure.
+    }
+#endif
+
     bool OnUserCreate() override {
         waveEngine.InitialiseAudio();
-
+#if defined(OLC_PLATFORM_EMSCRIPTEN)
+        emscripten_fetch_attr_t attr;
+        emscripten_fetch_attr_init(&attr);
+        strcpy(attr.requestMethod, "GET");
+        attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
+        attr.onsuccess = downloadSucceeded;
+        attr.onerror = downloadFailed;
+        emscripten_fetch(&attr, "http://localhost:8000/");
+#endif
         return true;
     }
 
