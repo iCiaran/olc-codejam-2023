@@ -34,16 +34,14 @@ void Maze::drawAroundPoint(olc::PixelGameEngine *pge, int cellSize, const olc::v
         for(int y = 0; y < size; y++) {
             int xSquared = (x * cellSize + halfCellSize - xCoord) * (x * cellSize + halfCellSize - xCoord);
             int ySquared = (y * cellSize + halfCellSize - yCoord) * (y * cellSize + halfCellSize - yCoord);
+            double rSquared = (radius + 0.9 * cellSize) * (radius + 0.9 * cellSize);
 
-            if(xSquared + ySquared < (radius + halfCellSize) * (radius + halfCellSize)) {
+            if(xSquared + ySquared <= rSquared) {
                 olc::Pixel colour = getCell(x, y) ? olc::WHITE : olc::BLACK;
                 pge->FillRect(x * cellSize, y * cellSize, cellSize, cellSize, colour);
             }
         }
     }
-
-    pge->Draw(xCoord, yCoord, olc::RED);
-    pge->DrawCircle(xCoord, yCoord, radius, olc::BLUE);
 }
 
 void Maze::generate() {
