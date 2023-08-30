@@ -89,7 +89,14 @@ add_executable(${OutputExecutable} # ${SOURCE_CXX_FILES}
         src/olcSoundWaveEngine.cpp
 
         src/main.cpp
-        src/maze.cpp
+        src/Maze.cpp
+
+        src/BaseState.cpp
+        src/MenuState.cpp
+        src/ExploreState.cpp
+        src/GameGlobals.cpp
+        src/EscapeState.cpp
+        src/WinState.cpp
 )
 
 ######################################################################

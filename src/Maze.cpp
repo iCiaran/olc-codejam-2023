@@ -1,4 +1,4 @@
-#include "maze.h"
+#include "Maze.h"
 
 Maze::Maze(int size, long long seed) : size(size), gen(seed), distrib(0, size - 3), cells(size * size, false) {
     generate();
