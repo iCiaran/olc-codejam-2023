@@ -1,14 +1,12 @@
 #include "ExploreState.h"
 
+ExploreState::ExploreState(GameGlobals *gameGlobals) : BaseState(gameGlobals) { }
+
+ExploreState::~ExploreState() = default;
+
 int ExploreState::lerp(int start, int finish, double t) {
     return static_cast<int>(start + (finish - start) * t);
 }
-
-ExploreState::ExploreState(GameGlobals *gameGlobals) : BaseState(gameGlobals) {
-    globals = gameGlobals;
-}
-
-ExploreState::~ExploreState() = default;
 
 GameGlobals::State ExploreState::onUpdate(olc::PixelGameEngine *pge, float fElapsedTime) {
     timer += fElapsedTime;
@@ -34,8 +32,9 @@ GameGlobals::State ExploreState::onUpdate(olc::PixelGameEngine *pge, float fElap
 bool ExploreState::onEnter(olc::PixelGameEngine *pge) {
     std::cout << "Entering explore state" << std::endl;
     timer = 0.0f;
-    delete globals->maze;
     globals->seed = time(nullptr);
+
+    delete globals->maze;
     globals->maze = new Maze(globals->mazeSize, globals->seed);
 
     return true;

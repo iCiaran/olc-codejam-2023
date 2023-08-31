@@ -3,9 +3,7 @@
 #include "olcPixelGameEngine.h"
 #include "MenuState.h"
 
-MenuState::MenuState(GameGlobals *gameGlobals) : BaseState(gameGlobals) {
-    globals = gameGlobals;
-}
+MenuState::MenuState(GameGlobals *gameGlobals) : BaseState(gameGlobals) { }
 MenuState::~MenuState() = default;
 
 GameGlobals::State MenuState::onUpdate(olc::PixelGameEngine *pge, float fElapsedTime) {

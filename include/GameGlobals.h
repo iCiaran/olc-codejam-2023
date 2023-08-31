@@ -10,20 +10,20 @@ public:
         MENU,
         EXPLORE,
         ESCAPE,
-        MANUAL,
         WIN
     };
 
-    long long seed{};
-    Maze *maze{};
+    const int cellSize;
+    const int mazeSize;
 
-    int cellSize;
-    int mazeSize;
-
-    int minRadius;
-    int maxRadius;
+    const int minRadius;
+    const int maxRadius;
 
     olc::Renderable circleMask{};
+
+    int movesTaken{};
+    long long seed{};
+    Maze *maze{};
 };
 
 #endif //OLCJAM2023_GAMEGLOBALS_H

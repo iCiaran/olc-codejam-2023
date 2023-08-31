@@ -1,8 +1,6 @@
 #include "EscapeState.h"
 
-EscapeState::EscapeState(GameGlobals *gameGlobals) : BaseState(gameGlobals) {
-    globals = gameGlobals;
-}
+EscapeState::EscapeState(GameGlobals *gameGlobals) : BaseState(gameGlobals) { }
 
 EscapeState::~EscapeState() = default;
 
@@ -64,6 +62,8 @@ bool EscapeState::onEnter(olc::PixelGameEngine *pge) {
 
 bool EscapeState::onExit(olc::PixelGameEngine *pge) {
     std::cout << "Exiting escape state" << std::endl;
+
+    globals->movesTaken = moveCounter;
 
     return true;
 }
