@@ -1,5 +1,22 @@
 #include "EscapeState.h"
 
+#if defined(OLC_PLATFORM_EMSCRIPTEN)
+#include <emscripten/fetch.h>
+
+void onError(struct emscripten_fetch_t *fetch) {
+    emscripten_fetch_close(fetch); // Also free data on failure.
+}
+
+void onSuccess(struct emscripten_fetch_t *fetch) {
+
+    auto test = static_cast<EscapeState*>(fetch->userData);
+    std::string responseBody(fetch->data, fetch->numBytes);
+    test->globals->httpResponse = responseBody;
+
+    emscripten_fetch_close(fetch);
+}
+#endif
+
 EscapeState::EscapeState(GameGlobals *gameGlobals) : BaseState(gameGlobals) { }
 
 EscapeState::~EscapeState() = default;
@@ -64,6 +81,17 @@ bool EscapeState::onExit(olc::PixelGameEngine *pge) {
     std::cout << "Exiting escape state" << std::endl;
 
     globals->movesTaken = moveCounter;
+
+#if defined(OLC_PLATFORM_EMSCRIPTEN)
+    emscripten_fetch_attr_t attr;
+    emscripten_fetch_attr_init(&attr);
+    strcpy(attr.requestMethod, "GET");
+    attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
+    attr.onsuccess = onSuccess;
+    attr.onerror = onError;
+    attr.userData = this;
+    emscripten_fetch(&attr, "http://localhost:5000/test.txt");
+#endif
 
     return true;
 }

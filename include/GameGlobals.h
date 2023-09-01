@@ -24,6 +24,8 @@ public:
     int movesTaken{};
     long long seed{};
     Maze *maze{};
+
+    std::string httpResponse;
 };
 
 #endif //OLCJAM2023_GAMEGLOBALS_H

@@ -309,6 +309,7 @@ if (EMSCRIPTEN)
             -sUSE_LIBPNG=1
             -sUSE_SDL_MIXER=2          # thanks for the s, cstd
             -sLLD_REPORT_UNDEFINED
+            -sFETCH
             --preload-file ${SOURCE_DATA_DIR}@assets)
     else()
         target_link_options(
@@ -319,6 +320,7 @@ if (EMSCRIPTEN)
             -sMIN_WEBGL_VERSION=2
             -sUSE_LIBPNG=1
             -sUSE_SDL_MIXER=2          # thanks for the s, cstd
+            -sFETCH
             -sLLD_REPORT_UNDEFINED)
     endif()
 

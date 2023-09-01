@@ -16,6 +16,8 @@ GameGlobals::State WinState::onUpdate(olc::PixelGameEngine *pge, float fElapsedT
     const olc::vi2d textSize = pge->GetTextSize(playString);
     pge->DrawStringDecal((pge->GetScreenSize() - textSize) / 2, playString);
 
+    pge->DrawStringDecal({10, 50}, globals->httpResponse, olc::RED);
+
     return GameGlobals::State::WIN;
 }
 

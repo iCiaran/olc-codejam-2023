@@ -13,7 +13,6 @@ public:
     virtual bool onEnter(olc::PixelGameEngine *pge) = 0;
     virtual bool onExit(olc::PixelGameEngine *pge) = 0;
 
-protected:
     GameGlobals *globals;
 };
 
