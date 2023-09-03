@@ -97,6 +97,7 @@ add_executable(${OutputExecutable} # ${SOURCE_CXX_FILES}
         src/GameGlobals.cpp
         src/EscapeState.cpp
         src/WinState.cpp
+        src/ScoreState.cpp
 )
 
 ######################################################################

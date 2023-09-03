@@ -4,10 +4,11 @@
 #include "MenuState.h"
 
 MenuState::MenuState(GameGlobals *gameGlobals) : BaseState(gameGlobals) {
-    playButton = new olc::QuickGUI::Button(mainMenu,  "Play", {30, 30}, {160, 30});
+    playButton = new olc::QuickGUI::Button(mainMenu, "Play", {30, 30}, {160, 30});
     randomSeed = new olc::QuickGUI::CheckBox(mainMenu, "Random", true, {30, 70}, {75, 30});
     enterSeed = new olc::QuickGUI::TextBox(mainMenu, "", {110, 70}, {75, 30});
     enterName = new olc::QuickGUI::TextBox(mainMenu, globals->name, {30, 110}, {160, 30});
+    scoreButton = new olc::QuickGUI::Button(mainMenu, "Scores", {30, 150}, {160, 30});
 }
 MenuState::~MenuState() = default;
 
@@ -16,6 +17,10 @@ GameGlobals::State MenuState::onUpdate(olc::PixelGameEngine *pge, float fElapsed
 
     if(playButton->bPressed) {
         return GameGlobals::State::EXPLORE;
+    }
+
+    if(scoreButton->bPressed) {
+        return GameGlobals::State::SCORES;
     }
 
     enterSeed->sText.erase(std::remove_if(enterSeed->sText.begin(), enterSeed->sText.end(),

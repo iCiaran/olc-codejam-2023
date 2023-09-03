@@ -14,7 +14,7 @@ GameGlobals::State WinState::onUpdate(olc::PixelGameEngine *pge, float fElapsedT
         pge->DrawStringDecal({10, 10}, "State: WIN", olc::RED);
     }
 
-    const std::string playString = "You escaped in " + std::to_string(globals->movesTaken) + " moves!";
+    const std::string playString = "You escaped maze " + std::to_string(globals->seed) + " in " + std::to_string(globals->movesTaken) + " moves!";
     const olc::vi2d textSize = pge->GetTextSize(playString);
     pge->DrawStringDecal((pge->GetScreenSize() - textSize) / 2, playString);
 

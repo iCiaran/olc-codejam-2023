@@ -1,6 +1,5 @@
 #include <unordered_map>
 #define OLC_PGEX_QUICKGUI
-#include "olcPGEX_QuickGUI.h"
 #include "olcPixelGameEngine.h"
 #include "olcSoundWaveEngine.h"
 
@@ -10,6 +9,7 @@
 #include "ExploreState.h"
 #include "EscapeState.h"
 #include "WinState.h"
+#include "ScoreState.h"
 
 constexpr int MAZE_SIZE = 25;
 constexpr int CELL_SIZE = 32;
@@ -46,6 +46,7 @@ public:
         stateMap[GameGlobals::State::EXPLORE] = new ExploreState(&globals);
         stateMap[GameGlobals::State::ESCAPE] = new EscapeState(&globals);
         stateMap[GameGlobals::State::WIN] = new WinState(&globals);
+        stateMap[GameGlobals::State::SCORES] = new ScoreState(&globals);
 
         return true;
     }

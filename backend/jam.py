@@ -38,7 +38,7 @@ def get_maze(id):
 
 @app.route("/api/scores", methods=["GET"])
 def list_scores():
-    scores = Score.query.order_by(Score.id).limit(10)
+    scores = Score.query.order_by(Score.id.desc()).limit(10)
     return [{"maze": score.maze_id, "name": score.name, "score": score.score} for score in scores]
 
 
@@ -56,7 +56,7 @@ def add_score():
     if not mu.validate(body["moves"]):
         return Response(status=400)
 
-    score = Score(body["id"], len(body["moves"]), body["name"])
+    score = Score(body["id"], len(body["moves"]), str(body["name"]).upper())
     db_session.add(score)
     db_session.commit()
 

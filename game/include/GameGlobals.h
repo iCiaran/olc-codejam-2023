@@ -10,7 +10,8 @@ public:
         MENU,
         EXPLORE,
         ESCAPE,
-        WIN
+        WIN,
+        SCORES
     };
 
     const int cellSize;
