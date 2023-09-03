@@ -27,7 +27,7 @@ public:
     long long seed{};
     Maze *maze{};
 
-    std::string httpResponse;
+    bool scoreSubmitted;
 };
 
 #endif //OLCJAM2023_GAMEGLOBALS_H

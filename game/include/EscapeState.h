@@ -13,7 +13,9 @@ public:
     bool onExit(olc::PixelGameEngine *pge) override;
 private:
     olc::vi2d playerPosition = {1, 1};
+    std::vector<int> moves;
     int moveCounter = 0;
+    std::string requestBody;
 };
 
 

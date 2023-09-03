@@ -20,6 +20,16 @@ GameGlobals::State WinState::onUpdate(olc::PixelGameEngine *pge, float fElapsedT
     const std::string shortestString = "The shortest path was " + std::to_string(globals->minMoves) + " moves.";
     const olc::vi2d shortestTextSize = pge->GetTextSize(shortestString);
     pge->DrawStringDecal((pge->GetScreenSize() - shortestTextSize) / 2 + olc::vi2d{0, 50}, shortestString);
+
+    if(globals->scoreSubmitted) {
+        const std::string submitString = "Score submitted";
+        const olc::vi2d submitTextSize = pge->GetTextSize(submitString);
+        pge->DrawStringDecal((pge->GetScreenSize() - submitTextSize) / 2 + olc::vi2d{0, 100}, submitString);
+    } else {
+        const std::string submitString = "Submitting score";
+        const olc::vi2d submitTextSize = pge->GetTextSize(submitString);
+        pge->DrawStringDecal((pge->GetScreenSize() - submitTextSize) / 2 + olc::vi2d{0, 100}, submitString);
+    }
 #endif
 
     return GameGlobals::State::WIN;

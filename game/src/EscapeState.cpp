@@ -2,16 +2,16 @@
 
 #if defined(OLC_PLATFORM_EMSCRIPTEN)
 #include <emscripten/fetch.h>
+#include "json.h"
+using json = nlohmann::json;
 
-void onError(struct emscripten_fetch_t *fetch) {
+void onSubmitScoreError(struct emscripten_fetch_t *fetch) {
     emscripten_fetch_close(fetch);
 }
 
-void onSuccess(struct emscripten_fetch_t *fetch) {
-
+void onSubmitScoreSuccess(struct emscripten_fetch_t *fetch) {
     auto state = static_cast<EscapeState*>(fetch->userData);
-    std::string responseBody(fetch->data, fetch->numBytes);
-    state->globals->httpResponse = responseBody;
+    state->globals->scoreSubmitted = true;
 
     emscripten_fetch_close(fetch);
 }
@@ -23,19 +23,24 @@ EscapeState::~EscapeState() = default;
 
 GameGlobals::State EscapeState::onUpdate(olc::PixelGameEngine *pge, float fElapsedTime) {
     olc::vi2d offset;
+    int dir;
     bool move = false;
 
     if(pge->GetKey(olc::Key::LEFT).bPressed) {
         offset = {-1, 0};
+        dir = 2;
         move = true;
     } else if(pge->GetKey(olc::Key::RIGHT).bPressed) {
         offset = {1, 0};
+        dir = 0;
         move = true;
     } else if(pge->GetKey(olc::Key::UP).bPressed) {
         offset = {0, -1};
+        dir = 3;
         move = true;
     } else if(pge->GetKey(olc::Key::DOWN).bPressed) {
         offset = {0, 1};
+        dir = 1;
         move = true;
     }
 
@@ -44,6 +49,7 @@ GameGlobals::State EscapeState::onUpdate(olc::PixelGameEngine *pge, float fElaps
 
         if(globals->maze->inBounds(nextPosition.x, nextPosition.y) && globals->maze->getCell(nextPosition.x, nextPosition.y)) {
             playerPosition = nextPosition;
+            moves.push_back(dir);
             moveCounter++;
         }
 
@@ -74,6 +80,9 @@ bool EscapeState::onEnter(olc::PixelGameEngine *pge) {
 
     playerPosition = {1, 1};
     moveCounter = 0;
+    moves.clear();
+    globals->scoreSubmitted = false;
+
     return true;
 }
 
@@ -83,14 +92,26 @@ bool EscapeState::onExit(olc::PixelGameEngine *pge) {
     globals->movesTaken = moveCounter;
 
 #if defined(OLC_PLATFORM_EMSCRIPTEN)
+    json body;
+    body["moves"] = moves;
+    body["name"] = "ciaran";
+    body["id"] = globals->seed;
+
+    requestBody = body.dump();
+
     emscripten_fetch_attr_t attr;
     emscripten_fetch_attr_init(&attr);
-    strcpy(attr.requestMethod, "GET");
+    strcpy(attr.requestMethod, "POST");
+    attr.requestData = requestBody.c_str();
+    attr.requestDataSize = requestBody.length();
     attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
-    attr.onsuccess = onSuccess;
-    attr.onerror = onError;
+    attr.onsuccess = onSubmitScoreSuccess;
+    attr.onerror = onSubmitScoreError;
     attr.userData = this;
-    emscripten_fetch(&attr, "http://localhost:5000/test.txt");
+    const char* headers[] = { "Content-Type", "application/json", 0 };
+    attr.requestHeaders = headers;
+
+    emscripten_fetch(&attr, "http://localhost:5000/api/scores");
 #endif
 
     return true;
