@@ -1,6 +1,9 @@
 #include <unordered_map>
 #define OLC_PGEX_QUICKGUI
+#define OLC_PGEX_SPLASHSCREEN
+
 #include "olcPixelGameEngine.h"
+#include "olcPGEX_SplashScreen.h"
 
 #include "GameGlobals.h"
 #include "BaseState.h"
@@ -19,6 +22,7 @@ public:
         sAppName = "Jam";
     }
 
+    olc::SplashScreen splash;
 private:
 
     std::unique_ptr<olc::Sprite> tileSheetFull;
