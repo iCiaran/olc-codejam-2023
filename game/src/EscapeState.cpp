@@ -68,15 +68,19 @@ GameGlobals::State EscapeState::onUpdate(olc::PixelGameEngine *pge, float fElaps
 
     pge->FillCircle(screenPosition, globals->cellSize / 4, olc::DARK_GREEN);
 
-    pge->DrawStringDecal({10,10}, "State: ESCAPE", olc::RED);
-    pge->DrawStringDecal({160,10}, "Moves: " + std::to_string(moveCounter), olc::RED);
-    pge->DrawStringDecal({310,10}, "Player: " + playerPosition.str(), olc::RED);
+    if(globals->debugText) {
+        pge->DrawStringDecal({10, 10}, "State: ESCAPE", olc::RED);
+        pge->DrawStringDecal({160, 10}, "Moves: " + std::to_string(moveCounter), olc::RED);
+        pge->DrawStringDecal({310, 10}, "Player: " + playerPosition.str(), olc::RED);
+    }
 
     return GameGlobals::State::ESCAPE;
 }
 
 bool EscapeState::onEnter(olc::PixelGameEngine *pge) {
-    std::cout << "Entering escape state" << std::endl;
+    if(globals->debugText) {
+        std::cout << "Entering escape state" << std::endl;
+    }
 
     playerPosition = {1, 1};
     moveCounter = 0;
@@ -87,31 +91,35 @@ bool EscapeState::onEnter(olc::PixelGameEngine *pge) {
 }
 
 bool EscapeState::onExit(olc::PixelGameEngine *pge) {
-    std::cout << "Exiting escape state" << std::endl;
+    if(globals->debugText) {
+        std::cout << "Exiting escape state" << std::endl;
+    }
 
     globals->movesTaken = moveCounter;
 
 #if defined(OLC_PLATFORM_EMSCRIPTEN)
-    json body;
-    body["moves"] = moves;
-    body["name"] = "ciaran";
-    body["id"] = globals->seed;
+    if(!globals->name.empty()){
+        json body;
+        body["moves"] = moves;
+        body["name"] = "ciaran";
+        body["id"] = globals->seed;
 
-    requestBody = body.dump();
+        requestBody = body.dump();
 
-    emscripten_fetch_attr_t attr;
-    emscripten_fetch_attr_init(&attr);
-    strcpy(attr.requestMethod, "POST");
-    attr.requestData = requestBody.c_str();
-    attr.requestDataSize = requestBody.length();
-    attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
-    attr.onsuccess = onSubmitScoreSuccess;
-    attr.onerror = onSubmitScoreError;
-    attr.userData = this;
-    const char* headers[] = { "Content-Type", "application/json", 0 };
-    attr.requestHeaders = headers;
+        emscripten_fetch_attr_t attr;
+        emscripten_fetch_attr_init(&attr);
+        strcpy(attr.requestMethod, "POST");
+        attr.requestData = requestBody.c_str();
+        attr.requestDataSize = requestBody.length();
+        attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
+        attr.onsuccess = onSubmitScoreSuccess;
+        attr.onerror = onSubmitScoreError;
+        attr.userData = this;
+        const char* headers[] = { "Content-Type", "application/json", 0 };
+        attr.requestHeaders = headers;
 
-    emscripten_fetch(&attr, "http://localhost:5000/api/scores");
+        emscripten_fetch(&attr, "http://localhost:5000/api/scores");
+    }
 #endif
 
     return true;

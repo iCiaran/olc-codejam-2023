@@ -10,7 +10,9 @@ GameGlobals::State WinState::onUpdate(olc::PixelGameEngine *pge, float fElapsedT
     }
 
     pge->Clear(olc::BLANK);
-    pge->DrawStringDecal({10,10}, "State: WIN", olc::RED);
+    if(globals->debugText) {
+        pge->DrawStringDecal({10, 10}, "State: WIN", olc::RED);
+    }
 
     const std::string playString = "You escaped in " + std::to_string(globals->movesTaken) + " moves!";
     const olc::vi2d textSize = pge->GetTextSize(playString);
@@ -36,13 +38,17 @@ GameGlobals::State WinState::onUpdate(olc::PixelGameEngine *pge, float fElapsedT
 }
 
 bool WinState::onEnter(olc::PixelGameEngine *pge) {
-    std::cout << "Entering win state" << std::endl;
+    if(globals->debugText) {
+        std::cout << "Entering win state" << std::endl;
+    }
 
     return true;
 }
 
 bool WinState::onExit(olc::PixelGameEngine *pge) {
-    std::cout << "Exiting win state" << std::endl;
+    if(globals->debugText) {
+        std::cout << "Exiting win state" << std::endl;
+    }
 
     return true;
 }

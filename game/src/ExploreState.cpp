@@ -55,17 +55,20 @@ GameGlobals::State ExploreState::onUpdate(olc::PixelGameEngine *pge, float fElap
     float scale = static_cast<float>(radius) / 128.0f;
     pge->DrawDecal({static_cast<float>(pge->GetMouseX() - radius) - 64 * scale, static_cast<float>(pge->GetMouseY() - radius) - 64 * scale}, globals->circleMask.Decal(), {scale, scale}, olc::BLACK);
 
-    pge->DrawStringDecal({10,10}, "State: EXPLORE", olc::RED);
-    pge->DrawStringDecal({160,10}, "Radius: " + std::to_string(radius), olc::RED);
-    pge->DrawStringDecal({310,10}, "Time: " + std::to_string(timer), olc::RED);
-
+    if(globals->debugText) {
+        pge->DrawStringDecal({10, 10}, "State: EXPLORE", olc::RED);
+        pge->DrawStringDecal({160, 10}, "Radius: " + std::to_string(radius), olc::RED);
+        pge->DrawStringDecal({310, 10}, "Time: " + std::to_string(timer), olc::RED);
+        pge->DrawStringDecal({460, 10}, "Seed: " + std::to_string(globals->seed), olc::RED);
+    }
     return GameGlobals::State::EXPLORE;
 }
 
 bool ExploreState::onEnter(olc::PixelGameEngine *pge) {
-    std::cout << "Entering explore state" << std::endl;
+    if(globals->debugText) {
+        std::cout << "Entering explore state" << std::endl;
+    }
     timer = 0.0f;
-    globals->seed = time(nullptr);
 
     delete globals->maze;
 #if defined(OLC_PLATFORM_EMSCRIPTEN)
@@ -87,7 +90,9 @@ bool ExploreState::onEnter(olc::PixelGameEngine *pge) {
 }
 
 bool ExploreState::onExit(olc::PixelGameEngine *pge) {
-    std::cout << "Exiting explore state" << std::endl;
+    if(globals->debugText) {
+        std::cout << "Exiting explore state" << std::endl;
+    }
 
     mazeLoaded = false;
 

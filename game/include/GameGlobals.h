@@ -21,12 +21,15 @@ public:
 
     olc::Renderable circleMask{};
 
+    bool debugText = true;
+
     int movesTaken{};
     int minMoves{};
 
     long long seed{};
     Maze *maze{};
 
+    std::string name;
     bool scoreSubmitted;
 };
 

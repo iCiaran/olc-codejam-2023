@@ -1,5 +1,6 @@
 #include <unordered_map>
-
+#define OLC_PGEX_QUICKGUI
+#include "olcPGEX_QuickGUI.h"
 #include "olcPixelGameEngine.h"
 #include "olcSoundWaveEngine.h"
 
