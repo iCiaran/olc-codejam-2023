@@ -5,3 +5,4 @@ bin
 cmake-build-debug
 embuild
 jam.db
+*.zip

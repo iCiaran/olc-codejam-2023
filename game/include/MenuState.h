@@ -15,6 +15,8 @@ public:
     olc::QuickGUI::TextBox *enterSeed;
     olc::QuickGUI::TextBox *enterName;
     olc::QuickGUI::Button *scoreButton;
+    olc::QuickGUI::Label *seedLabel;
+    olc::QuickGUI::Label *nameLabel;
 
     GameGlobals::State onUpdate(olc::PixelGameEngine *pge, float fElapsedTime) override;
     bool onEnter(olc::PixelGameEngine *pge) override;

@@ -34,6 +34,10 @@ GameGlobals::State WinState::onUpdate(olc::PixelGameEngine *pge, float fElapsedT
     }
 #endif
 
+    const std::string continueString = "Press space to continue";
+    const olc::vi2d continueSize = pge->GetTextSize(continueString);
+    pge->DrawStringDecal((pge->GetScreenSize() - continueSize) / 2 + olc::vi2d{0, 200}, continueString);
+
     return GameGlobals::State::WIN;
 }
 

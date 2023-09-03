@@ -99,6 +99,16 @@ GameGlobals::State ScoreState::onUpdate(olc::PixelGameEngine *pge, float fElapse
         staticDisplay.Update(pge);
         staticDisplay.Draw(pge);
 
+        if(mazeId.empty()){
+            const std::string headerString = "Recent scores";
+            const olc::vi2d headerSize = pge->GetTextSize(headerString);
+            pge->DrawStringDecal(((pge->GetScreenSize() - headerSize * 2) / 2) - olc::vf2d{0, 300}, headerString, olc::WHITE, { 2.0f, 2.0f });
+        } else {
+           const std::string headerString = "Top scores for maze " + mazeId;
+            const olc::vi2d headerSize = pge->GetTextSize(headerString);
+            pge->DrawStringDecal(((pge->GetScreenSize() - headerSize * 2) / 2) - olc::vf2d{0, 300}, headerString, olc::WHITE, { 2.0f, 2.0f });
+        }
+
         pge->DrawLine({200, 190}, {500, 190}, olc::WHITE);
 
         for(int i = 0; i < playButtons.size(); i++) {
@@ -111,7 +121,7 @@ GameGlobals::State ScoreState::onUpdate(olc::PixelGameEngine *pge, float fElapse
 
         enterMaze->sText.erase(std::remove_if(enterMaze->sText.begin(), enterMaze->sText.end(),
                            []( auto const& c ) -> bool { return !std::isdigit(c); } ), enterMaze->sText.end());
-        enterMaze->sText = enterMaze->sText.substr(0, 4);
+        enterMaze->sText = enterMaze->sText.substr(0, 3);
 
         if(mazeButton->bPressed) {
             mazeId = enterMaze->sText;
@@ -150,7 +160,7 @@ bool ScoreState::onExit(olc::PixelGameEngine *pge) {
 void ScoreState::updateScores() {
 #if defined(OLC_PLATFORM_EMSCRIPTEN)
     fetching = true;
-    std::string url = mazeId.empty() ? "http://localhost:5000/api/scores" : "http://localhost:5000/api/scores/" + mazeId;
+    std::string url = mazeId.empty() ? globals -> apiUrl + "scores" :  globals -> apiUrl + "scores/" + mazeId;
     emscripten_fetch_attr_t attr;
     emscripten_fetch_attr_init(&attr);
     strcpy(attr.requestMethod, "GET");

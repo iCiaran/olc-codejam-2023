@@ -22,7 +22,7 @@ public:
 
     olc::Renderable circleMask{};
 
-    bool debugText = true;
+    bool debugText = false;
 
     int movesTaken{};
     int minMoves{};
@@ -30,8 +30,12 @@ public:
     long long seed{};
     Maze *maze{};
 
-    std::string name;
+    std::string name = "LoneCoder";
     bool scoreSubmitted;
+
+    std::string apiUrl = "https://olc.iciaran.com/api/";
+//    std::string apiUrl = "http://localhost:5000/api/";
+
 };
 
 #endif //OLCJAM2023_GAMEGLOBALS_H

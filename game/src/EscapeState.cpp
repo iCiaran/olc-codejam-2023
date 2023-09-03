@@ -101,7 +101,7 @@ bool EscapeState::onExit(olc::PixelGameEngine *pge) {
     if(!globals->name.empty()){
         json body;
         body["moves"] = moves;
-        body["name"] = "ciaran";
+        body["name"] = globals->name;
         body["id"] = globals->seed;
 
         requestBody = body.dump();
@@ -118,7 +118,8 @@ bool EscapeState::onExit(olc::PixelGameEngine *pge) {
         const char* headers[] = { "Content-Type", "application/json", 0 };
         attr.requestHeaders = headers;
 
-        emscripten_fetch(&attr, "http://localhost:5000/api/scores");
+        std::string url =  globals -> apiUrl + "scores";
+        emscripten_fetch(&attr, url.c_str());
     }
 #endif
 

@@ -72,7 +72,7 @@ bool ExploreState::onEnter(olc::PixelGameEngine *pge) {
 
     delete globals->maze;
 #if defined(OLC_PLATFORM_EMSCRIPTEN)
-    std::string url = "http://localhost:5000/api/mazes/" + std::to_string(globals->seed);
+    std::string url = globals -> apiUrl + "mazes/" + std::to_string(globals->seed);
     emscripten_fetch_attr_t attr;
     emscripten_fetch_attr_init(&attr);
     strcpy(attr.requestMethod, "GET");
