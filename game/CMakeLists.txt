@@ -84,9 +84,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # Executable aka binary output
 add_executable(${OutputExecutable} # ${SOURCE_CXX_FILES}
-        src/AssetManager.cpp
         src/olcPixelGameEngine.cpp
-        src/olcSoundWaveEngine.cpp
 
         src/main.cpp
         src/Maze.cpp

@@ -1,7 +1,6 @@
 #include <unordered_map>
 #define OLC_PGEX_QUICKGUI
 #include "olcPixelGameEngine.h"
-#include "olcSoundWaveEngine.h"
 
 #include "GameGlobals.h"
 #include "BaseState.h"
@@ -13,7 +12,6 @@
 
 constexpr int MAZE_SIZE = 25;
 constexpr int CELL_SIZE = 32;
-//constexpr int TILE_SIZE = 64;
 
 class OneLoneCoder_Jam : public olc::PixelGameEngine {
 public:
@@ -22,7 +20,6 @@ public:
     }
 
 private:
-    olc::sound::WaveEngine waveEngine;
 
     std::unique_ptr<olc::Sprite> tileSheetFull;
     std::unique_ptr<olc::Sprite> tileSheetRegion;
@@ -36,10 +33,6 @@ private:
 
 public:
     bool OnUserCreate() override {
-        waveEngine.InitialiseAudio();
-//        tileSheetFull = std::make_unique<olc::Sprite>("assets/gfx/tilesheet_complete.png");
-//        tileSheetDecal = std::make_unique<olc::Decal>(tileSheetFull->Duplicate({0, TILE_SIZE * 4}, {TILE_SIZE * 9, TILE_SIZE * 6}));
-
         globals.circleMask.Load("assets/gfx/circle_mask.png");
 
         stateMap[GameGlobals::State::MENU] = new MenuState(&globals);
@@ -60,7 +53,7 @@ public:
 
         nextState = stateMap[currentState]->onUpdate(this, fElapsedTime);
 
-        return !GetKey(olc::ESCAPE).bPressed;
+        return true;
     }
 };
 
