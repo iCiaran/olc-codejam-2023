@@ -8,6 +8,7 @@
 class Maze {
 public:
     Maze(int size, long long seed);
+    Maze(int size, const std::vector<int>& intCells);
     const int size;
 
     bool getCell(int x, int y);

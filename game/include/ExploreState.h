@@ -12,6 +12,8 @@ public:
     bool onEnter(olc::PixelGameEngine *pge) override;
     bool onExit(olc::PixelGameEngine *pge) override;
 
+    bool mazeLoaded = false;
+
 private:
     float timer{};
     float maxTime = 20.0f;

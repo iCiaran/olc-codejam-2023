@@ -22,6 +22,8 @@ public:
     olc::Renderable circleMask{};
 
     int movesTaken{};
+    int minMoves{};
+
     long long seed{};
     Maze *maze{};
 

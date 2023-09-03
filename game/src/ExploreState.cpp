@@ -1,5 +1,31 @@
 #include "ExploreState.h"
 
+#if defined(OLC_PLATFORM_EMSCRIPTEN)
+#include <emscripten/fetch.h>
+#include "json.h"
+using json = nlohmann::json;
+
+void onGetMazeError(struct emscripten_fetch_t *fetch) {
+    emscripten_fetch_close(fetch);
+}
+
+void onGetMazeSuccess(struct emscripten_fetch_t *fetch) {
+
+    auto state = static_cast<ExploreState*>(fetch->userData);
+    std::string responseBody(fetch->data, fetch->numBytes);
+    json response = json::parse(responseBody);
+
+    std::vector cells = response["cells"].get<std::vector<int>>();
+    int minMoves = response["shortest"].get<int>();
+
+    state->globals->maze = new Maze(25, cells);
+    state->globals->minMoves = minMoves;
+    state->mazeLoaded = true;
+
+    emscripten_fetch_close(fetch);
+}
+#endif
+
 ExploreState::ExploreState(GameGlobals *gameGlobals) : BaseState(gameGlobals) { }
 
 ExploreState::~ExploreState() = default;
@@ -9,6 +35,13 @@ int ExploreState::lerp(int start, int finish, double t) {
 }
 
 GameGlobals::State ExploreState::onUpdate(olc::PixelGameEngine *pge, float fElapsedTime) {
+    if(!mazeLoaded) {
+        pge->Clear(olc::BLANK);
+        const std::string playString = "Loading maze";
+        const olc::vi2d textSize = pge->GetTextSize(playString);
+        pge->DrawStringDecal((pge->GetScreenSize() - textSize) / 2, playString);
+        return GameGlobals::State::EXPLORE;
+    }
     timer += fElapsedTime;
 
     if (timer > maxTime) {
@@ -35,13 +68,28 @@ bool ExploreState::onEnter(olc::PixelGameEngine *pge) {
     globals->seed = time(nullptr);
 
     delete globals->maze;
+#if defined(OLC_PLATFORM_EMSCRIPTEN)
+    std::string url = "http://localhost:5000/api/mazes/" + std::to_string(globals->seed);
+    emscripten_fetch_attr_t attr;
+    emscripten_fetch_attr_init(&attr);
+    strcpy(attr.requestMethod, "GET");
+    attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
+    attr.onsuccess = onGetMazeSuccess;
+    attr.onerror = onGetMazeError;
+    attr.userData = this;
+    emscripten_fetch(&attr, url.c_str());
+#else
     globals->maze = new Maze(globals->mazeSize, globals->seed);
+    mazeLoaded = true;
+#endif
 
     return true;
 }
 
 bool ExploreState::onExit(olc::PixelGameEngine *pge) {
     std::cout << "Exiting explore state" << std::endl;
+
+    mazeLoaded = false;
 
     return true;
 }

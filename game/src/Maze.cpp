@@ -4,6 +4,14 @@ Maze::Maze(int size, long long seed) : size(size), gen(seed), distrib(0, size - 
     generate();
 }
 
+Maze::Maze(int size, const std::vector<int>& intCells) : size(size){
+    for(int y = 0; y < size; y++) {
+        for(int x = 0; x < size; x++) {
+            cells.push_back(intCells.at(y * size + x));
+        }
+    }
+}
+
 bool Maze::getCell(int x, int y) {
     return cells[y * size + x];
 }
@@ -113,3 +121,4 @@ void Maze::iterateKruskal() {
         break;
     }
 }
+

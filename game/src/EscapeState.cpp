@@ -4,14 +4,14 @@
 #include <emscripten/fetch.h>
 
 void onError(struct emscripten_fetch_t *fetch) {
-    emscripten_fetch_close(fetch); // Also free data on failure.
+    emscripten_fetch_close(fetch);
 }
 
 void onSuccess(struct emscripten_fetch_t *fetch) {
 
-    auto test = static_cast<EscapeState*>(fetch->userData);
+    auto state = static_cast<EscapeState*>(fetch->userData);
     std::string responseBody(fetch->data, fetch->numBytes);
-    test->globals->httpResponse = responseBody;
+    state->globals->httpResponse = responseBody;
 
     emscripten_fetch_close(fetch);
 }
