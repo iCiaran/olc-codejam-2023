@@ -65,5 +65,5 @@ def add_score():
 
 @app.route("/api/scores/<int:id>", methods=["GET"])
 def get_score(id):
-    scores = Score.query.filter(Score.maze_id == id).order_by(Score.score.desc(), Score.id).limit(10)
+    scores = Score.query.filter(Score.maze_id == id).order_by(Score.score, Score.id).limit(10)
     return [{"maze": score.maze_id, "name": score.name, "score": score.score} for score in scores]
